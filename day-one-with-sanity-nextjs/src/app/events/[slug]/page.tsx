@@ -1,9 +1,10 @@
 import { sanityFetch } from "@/sanity/live";
-import { defineQuery, PortableText } from "next-sanity";
+import { defineQuery, PortableTextBlock } from "next-sanity";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { urlFor } from "@/sanity/image";
+import { RichText } from "@/sanity/portableTextComponents";
 const EVENT_QUERY = defineQuery(`*[
     _type == "event" &&
     slug.current == $slug
@@ -107,7 +108,7 @@ export default async function EventPage({
           </div>
           {details && details.length > 0 && (
             <div className="prose max-w-none">
-              <PortableText value={details} />
+              <RichText value={details as PortableTextBlock[]} />
             </div>
           )}
           {tickets && (

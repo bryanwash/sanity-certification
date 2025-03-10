@@ -1,12 +1,9 @@
-import { client } from "@/sanity/client";
 import { sanityFetch } from "@/sanity/live";
-import imageUrlBuilder from "@sanity/image-url";
-import { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { defineQuery, PortableText } from "next-sanity";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-
+import { urlFor } from "@/sanity/image";
 const EVENT_QUERY = defineQuery(`*[
     _type == "event" &&
     slug.current == $slug
@@ -17,12 +14,6 @@ const EVENT_QUERY = defineQuery(`*[
   headline->,
   venue->
 }`);
-
-const { projectId, dataset } = client.config();
-const urlFor = (source: SanityImageSource) =>
-  projectId && dataset
-    ? imageUrlBuilder({ projectId, dataset }).image(source)
-    : null;
 
 export default async function EventPage({
   params,

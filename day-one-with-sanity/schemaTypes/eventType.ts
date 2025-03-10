@@ -74,6 +74,9 @@ export const eventType = defineType({
     defineField({
       name: 'image',
       type: 'image',
+      options: {
+        hotspot: true,
+      },
       group: 'editorial',
     }),
     defineField({

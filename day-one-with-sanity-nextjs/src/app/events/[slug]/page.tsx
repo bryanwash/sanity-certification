@@ -5,6 +5,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { urlFor } from "@/sanity/image";
 import { RichText } from "@/sanity/portableTextComponents";
+import { RelatedEvents } from "@/components/RelatedEvents";
 const EVENT_QUERY = defineQuery(`*[
     _type == "event" &&
     slug.current == $slug
@@ -13,7 +14,11 @@ const EVENT_QUERY = defineQuery(`*[
   "date": coalesce(date, now()),
   "doorsOpen": coalesce(doorsOpen, 0),
   headline->,
-  venue->
+  venue->,
+  relatedEvents[]{
+    _key, // required for drag and drop
+    ...@->{_id, name, slug} // get fields from the referenced post
+  }
 }`);
 
 export default async function EventPage({
@@ -38,6 +43,7 @@ export default async function EventPage({
     doorsOpen,
     venue,
     tickets,
+    relatedEvents,
   } = event;
   const eventImageUrl = image
     ? urlFor(image)?.width(550).height(310).url()
@@ -121,6 +127,11 @@ export default async function EventPage({
           )}
         </div>
       </div>
+      <RelatedEvents
+        relatedEvents={relatedEvents}
+        documentId={event._id}
+        documentType="event"
+      />
     </main>
   );
 }

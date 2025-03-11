@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import {defineArrayMember, defineField, defineType} from 'sanity'
 import {CalendarIcon} from '@sanity/icons'
 import {DoorsOpenInput} from './components/doorsOpen'
 export const eventType = defineType({
@@ -88,6 +88,17 @@ export const eventType = defineType({
     defineField({
       name: 'tickets',
       type: 'url',
+      group: 'details',
+    }),
+    defineField({
+      name: 'relatedEvents',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          type: 'reference',
+          to: [{type: 'event'}],
+        }),
+      ],
       group: 'details',
     }),
   ],

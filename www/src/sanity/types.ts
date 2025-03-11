@@ -68,6 +68,88 @@ export type Geopoint = {
   alt?: number;
 };
 
+export type TwoUpBlock = {
+  _type: "twoUpBlock";
+  leftColumn?: {
+    image?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    };
+    content?: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+      listItem?: "bullet" | "number";
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }>;
+  };
+  rightColumn?: {
+    image?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    };
+    content?: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+      listItem?: "bullet" | "number";
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }>;
+  };
+};
+
+export type OneUpBlock = {
+  _type: "oneUpBlock";
+  title?: string;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+};
+
 export type Event = {
   _id: string;
   _type: "event";
@@ -130,6 +212,17 @@ export type Event = {
   }>;
 };
 
+export type Artist = {
+  _id: string;
+  _type: "artist";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  slug?: Slug;
+  content?: ContentArea;
+};
+
 export type SanityImageCrop = {
   _type: "sanity.imageCrop";
   top?: number;
@@ -187,13 +280,13 @@ export type SanityImageMetadata = {
   isOpaque?: boolean;
 };
 
-export type Artist = {
-  _id: string;
-  _type: "artist";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name?: string;
+export type ContentArea = {
+  _type: "contentArea";
+  blocks?: Array<{
+    _key: string;
+  } & OneUpBlock | {
+    _key: string;
+  } & TwoUpBlock>;
 };
 
 export type Venue = {
@@ -211,8 +304,22 @@ export type Slug = {
   source?: string;
 };
 
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | Event | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | Artist | Venue | Slug;
+export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | TwoUpBlock | OneUpBlock | Event | Artist | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | ContentArea | Venue | Slug;
 export declare const internalGroqTypeReferenceTo: unique symbol;
+// Source: ../www/src/app/artists/[slug]/page.tsx
+// Variable: ARTIST_QUERY
+// Query: *[    _type == "artist" &&    slug.current == $slug  ][0]{    ...,    content  }
+export type ARTIST_QUERYResult = {
+  _id: string;
+  _type: "artist";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  slug?: Slug;
+  content: ContentArea | null;
+} | null;
+
 // Source: ../www/src/app/events/[slug]/page.tsx
 // Variable: EVENT_QUERY
 // Query: *[    _type == "event" &&    slug.current == $slug  ][0]{  ...,  "date": coalesce(date, now()),  "doorsOpen": coalesce(doorsOpen, 0),  headline->,  venue->,  relatedEvents[]{    _key, // required for drag and drop    ...@->{_id, name, slug} // get fields from the referenced post  }}
@@ -242,6 +349,8 @@ export type EVENT_QUERYResult = {
     _updatedAt: string;
     _rev: string;
     name?: string;
+    slug?: Slug;
+    content?: ContentArea;
   } | null;
   image?: {
     asset?: {
@@ -295,6 +404,7 @@ export type EVENTS_QUERYResult = Array<{
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
+    "*[\n    _type == \"artist\" &&\n    slug.current == $slug\n  ][0]{\n    ...,\n    content\n  }": ARTIST_QUERYResult;
     "*[\n    _type == \"event\" &&\n    slug.current == $slug\n  ][0]{\n  ...,\n  \"date\": coalesce(date, now()),\n  \"doorsOpen\": coalesce(doorsOpen, 0),\n  headline->,\n  venue->,\n  relatedEvents[]{\n    _key, // required for drag and drop\n    ...@->{_id, name, slug} // get fields from the referenced post\n  }\n}": EVENT_QUERYResult;
     "*[\n  _type == \"event\"\n  && defined(slug.current)\n]{_id, name, slug, date}|order(date desc)": EVENTS_QUERYResult;
   }

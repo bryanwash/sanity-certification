@@ -12,3 +12,11 @@ export const client = createClient({
         : "https://sanity-certification-sigma.vercel.app/",
   },
 });
+
+const { projectId, dataset, stega } = client.config();
+
+export const createDataAttributeConfig = {
+  projectId,
+  dataset,
+  baseUrl: typeof stega.studioUrl === "string" ? stega.studioUrl : "",
+};

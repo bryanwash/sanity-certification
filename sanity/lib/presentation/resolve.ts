@@ -17,5 +17,20 @@ export const resolve: PresentationPluginOptions['resolve'] = {
         ],
       }),
     }),
+
+    artist: defineLocations({
+      select: {
+        title: 'name',
+        slug: 'slug.current',
+      },
+      resolve: (doc) => ({
+        locations: [
+          {
+            title: doc?.title || 'Untitled',
+            href: `/artists/${doc?.slug}`,
+          },
+        ],
+      }),
+    }),
   },
 }

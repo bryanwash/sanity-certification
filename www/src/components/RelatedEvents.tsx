@@ -1,18 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { createDataAttribute } from "next-sanity";
 import { EVENT_QUERYResult } from "@/sanity/types";
-import { client } from "@/sanity/client";
+import { createDataAttribute } from "next-sanity";
+import { createDataAttributeConfig } from "@/sanity/client";
 import { useOptimistic } from "next-sanity/hooks";
-
-const { projectId, dataset, stega } = client.config();
-
-export const createDataAttributeConfig = {
-  projectId,
-  dataset,
-  baseUrl: typeof stega.studioUrl === "string" ? stega.studioUrl : "",
-};
 
 export function RelatedEvents({
   relatedEvents,

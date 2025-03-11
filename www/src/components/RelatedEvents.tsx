@@ -35,7 +35,6 @@ export function RelatedEvents({
     }
     return state;
   });
-  console.log(events);
   if (!events) {
     return null;
   }

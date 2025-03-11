@@ -213,7 +213,7 @@ export type Slug = {
 
 export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | Event | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | Artist | Venue | Slug;
 export declare const internalGroqTypeReferenceTo: unique symbol;
-// Source: ../day-one-with-sanity-nextjs/src/app/events/[slug]/page.tsx
+// Source: ../www/src/app/events/[slug]/page.tsx
 // Variable: EVENT_QUERY
 // Query: *[    _type == "event" &&    slug.current == $slug  ][0]{  ...,  "date": coalesce(date, now()),  "doorsOpen": coalesce(doorsOpen, 0),  headline->,  venue->,  relatedEvents[]{    _key, // required for drag and drop    ...@->{_id, name, slug} // get fields from the referenced post  }}
 export type EVENT_QUERYResult = {
@@ -281,7 +281,7 @@ export type EVENT_QUERYResult = {
   }> | null;
 } | null;
 
-// Source: ../day-one-with-sanity-nextjs/src/app/page.tsx
+// Source: ../www/src/app/page.tsx
 // Variable: EVENTS_QUERY
 // Query: *[  _type == "event"  && defined(slug.current)]{_id, name, slug, date}|order(date desc)
 export type EVENTS_QUERYResult = Array<{
